@@ -40,33 +40,70 @@ interface Course {
   lessons: Lesson[];
 }
 
-const generateQuizzes = (topic: string): Quiz[] => [
-  {
-    question: `What is the most important rule about ${topic}?`,
-    options: ["Ignore it completely", "Always be cautious and double check", "Share it with everyone", "Only use it at night"],
-    correctAnswer: 1
-  },
-  {
-    question: `Which of these is a key component of ${topic}?`,
-    options: ["A physical hammer", "Digital awareness", "A bowl of soup", "A television remote"],
-    correctAnswer: 1
-  },
-  {
-    question: `How often should you update your knowledge of ${topic}?`,
-    options: ["Never", "Once every 10 years", "Regularly, as technology changes", "Only when someone tells you to"],
-    correctAnswer: 2
-  },
-  {
-    question: `Why is ${topic} helpful for seniors?`,
-    options: ["It makes them younger", "It helps them stay connected and safe", "It provides free groceries", "It fixes physical leaky faucets"],
-    correctAnswer: 1
-  },
-  {
-    question: `Who can you contact for help with ${topic}?`,
-    options: ["The local bakery", "ElderNet support or a trusted family member", "A random person on the street", "The fire department"],
-    correctAnswer: 1
-  }
-];
+const generateQuizzes = (topic: string, lessonId: string): Quiz[] => {
+  const questionTemplates = [
+    {
+      question: `What is the most important rule about ${topic}?`,
+      options: ["Ignore it completely", "Always be cautious and double check", "Share it with everyone", "Only use it at night"],
+      correctAnswer: 1
+    },
+    {
+      question: `Which of these is a key component of ${topic}?`,
+      options: ["A physical hammer", "Digital awareness", "A bowl of soup", "A television remote"],
+      correctAnswer: 1
+    },
+    {
+      question: `How often should you update your knowledge of ${topic}?`,
+      options: ["Never", "Once every 10 years", "Regularly, as technology changes", "Only when someone tells you to"],
+      correctAnswer: 2
+    },
+    {
+      question: `Why is ${topic} helpful for seniors?`,
+      options: ["It makes them younger", "It helps them stay connected and safe", "It provides free groceries", "It fixes physical leaky faucets"],
+      correctAnswer: 1
+    },
+    {
+      question: `Who can you contact for help with ${topic}?`,
+      options: ["The local bakery", "ElderNet support or a trusted family member", "A random person on the street", "The fire department"],
+      correctAnswer: 1
+    },
+    {
+      question: `What should you do if you receive a suspicious message about ${topic}?`,
+      options: ["Click on all links immediately", "Delete it and report to authorities", "Forward it to all your contacts", "Ignore it and hope it goes away"],
+      correctAnswer: 1
+    },
+    {
+      question: `How can ${topic} improve your daily life?`,
+      options: ["By making everything more complicated", "By providing easy access to information and communication", "By requiring you to buy expensive equipment", "By limiting your social interactions"],
+      correctAnswer: 1
+    },
+    {
+      question: `What is a common mistake people make with ${topic}?`,
+      options: ["Using it too safely", "Sharing personal information carelessly", "Updating software too frequently", "Learning new features"],
+      correctAnswer: 1
+    },
+    {
+      question: `How does ${topic} protect your privacy?`,
+      options: ["It doesn't protect privacy at all", "Through secure connections and careful sharing", "By storing all your data publicly", "By requiring no passwords"],
+      correctAnswer: 1
+    },
+    {
+      question: `What resources are available for learning more about ${topic}?`,
+      options: ["Only paid courses", "Free online tutorials and ElderNet courses", "Secret underground meetings", "Only through word of mouth"],
+      correctAnswer: 1
+    }
+  ];
+
+  // Use lessonId to seed selection for consistency per lesson
+  const seed = lessonId.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
+  const shuffled = [...questionTemplates].sort((a, b) => {
+    const hashA = (a.question.length + seed) % 10;
+    const hashB = (b.question.length + seed) % 10;
+    return hashA - hashB;
+  });
+
+  return shuffled.slice(0, 5);
+};
 
 export default function Courses() {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
@@ -101,18 +138,18 @@ export default function Courses() {
       lessons: [
         { 
           id: "1-1", title: "What is the Internet?", duration: "5:30", completed: false,
-          videoUrl: "https://www.youtube.com/embed/Dxcc6ycZ73M",
-          quizzes: generateQuizzes("the Internet")
+          videoUrl: "https://www.youtube.com/embed/AYdF7b3nM-Q",
+          quizzes: generateQuizzes("the Internet", "1-1")
         },
         { 
           id: "1-2", title: "How does the Internet Work?", duration: "8:15", completed: false,
-          videoUrl: "https://www.youtube.com/embed/7_LPdttKXPc",
-          quizzes: generateQuizzes("Internet connections")
+          videoUrl: "https://www.youtube.com/embed/TNQsmPf24go",
+          quizzes: generateQuizzes("Internet connections", "1-2")
         },
         { 
           id: "1-3", title: "Using a Web Browser", duration: "10:00", completed: false,
-          videoUrl: "https://www.youtube.com/embed/BrXPcaRlBqo",
-          quizzes: generateQuizzes("Web Browsers")
+          videoUrl: "https://www.youtube.com/embed/o4MwTvtyrUQ",
+          quizzes: generateQuizzes("Web Browsers", "1-3")
         },
       ]
     },
@@ -123,9 +160,9 @@ export default function Courses() {
       description: "Set up an email account, send messages, and learn how to attach photos.",
       progress: 45,
       lessons: [
-        { id: "2-1", title: "Setting up Gmail", duration: "7:45", completed: false, videoUrl: "https://www.youtube.com/embed/8L-70T_m5ps", quizzes: generateQuizzes("Gmail") },
-        { id: "2-2", title: "Sending your first email", duration: "6:20", completed: false, videoUrl: "https://www.youtube.com/embed/2_Yv8T-v_5s", quizzes: generateQuizzes("Emailing") },
-        { id: "2-3", title: "Managing your inbox", duration: "9:10", completed: false, videoUrl: "https://www.youtube.com/embed/T6fW9H-Kq_U", quizzes: generateQuizzes("Inbox management") },
+        { id: "2-1", title: "Setting up Gmail", duration: "7:45", completed: false, videoUrl: "https://www.youtube.com/embed/Z9W5B4Fx7wE", quizzes: generateQuizzes("Gmail", "2-1") },
+        { id: "2-2", title: "Sending your first email", duration: "6:20", completed: false, videoUrl: "https://www.youtube.com/embed/2_Yv8T-v_5s", quizzes: generateQuizzes("Emailing", "2-2") },
+        { id: "2-3", title: "Managing your inbox", duration: "9:10", completed: false, videoUrl: "https://www.youtube.com/embed/T6fW9H-Kq_U", quizzes: generateQuizzes("Inbox management", "2-3") },
       ]
     },
     {
@@ -135,9 +172,9 @@ export default function Courses() {
       description: "Essential knowledge on identifying phishing, strong passwords, and secure browsing.",
       progress: 0,
       lessons: [
-        { id: "3-1", title: "Spotting Phishing Scams", duration: "12:30", completed: false, videoUrl: "https://www.youtube.com/embed/XBkzBrXllBA", quizzes: generateQuizzes("Phishing") },
-        { id: "3-2", title: "Creating Strong Passwords", duration: "8:45", completed: false, videoUrl: "https://www.youtube.com/embed/7U-RbOKanYs", quizzes: generateQuizzes("Passwords") },
-        { id: "3-3", title: "Safe Online Shopping", duration: "11:15", completed: false, videoUrl: "https://www.youtube.com/embed/6m6uP8n0v5E", quizzes: generateQuizzes("Safe shopping") },
+        { id: "3-1", title: "Spotting Phishing Scams", duration: "12:30", completed: false, videoUrl: "https://www.youtube.com/embed/_D7J0Bzn2mQ", quizzes: generateQuizzes("Phishing", "3-1") },
+        { id: "3-2", title: "Creating Strong Passwords", duration: "8:45", completed: false, videoUrl: "https://www.youtube.com/embed/7U-RbOKanYs", quizzes: generateQuizzes("Passwords", "3-2") },
+        { id: "3-3", title: "Safe Online Shopping", duration: "11:15", completed: false, videoUrl: "https://www.youtube.com/embed/6m6uP8n0v5E", quizzes: generateQuizzes("Safe shopping", "3-3") },
       ]
     }
   ];
@@ -272,3 +309,4 @@ export default function Courses() {
     </div>
   );
 }
+
