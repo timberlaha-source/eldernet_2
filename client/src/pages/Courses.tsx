@@ -160,7 +160,7 @@ export default function Courses() {
       description: "Set up an email account, send messages, and learn how to attach photos.",
       progress: 45,
       lessons: [
-        { id: "2-1", title: "Setting up Gmail", duration: "7:45", completed: false, videoUrl: "https://www.youtube.com/embed/Z9W5B4Fx7wE", quizzes: generateQuizzes("Gmail", "2-1") },
+        { id: "2-1", title: "Setting up Gmail", duration: "7:45", completed: false, videoUrl: "https://www.youtube.com/embed/YPzYlc5DfzA", quizzes: generateQuizzes("Gmail", "2-1") },
         { id: "2-2", title: "Sending your first email", duration: "6:20", completed: false, videoUrl: "https://www.youtube.com/embed/2_Yv8T-v_5s", quizzes: generateQuizzes("Emailing", "2-2") },
         { id: "2-3", title: "Managing your inbox", duration: "9:10", completed: false, videoUrl: "https://www.youtube.com/embed/T6fW9H-Kq_U", quizzes: generateQuizzes("Inbox management", "2-3") },
       ]
@@ -172,7 +172,7 @@ export default function Courses() {
       description: "Essential knowledge on identifying phishing, strong passwords, and secure browsing.",
       progress: 0,
       lessons: [
-        { id: "3-1", title: "Spotting Phishing Scams", duration: "12:30", completed: false, videoUrl: "https://www.youtube.com/embed/_D7J0Bzn2mQ", quizzes: generateQuizzes("Phishing", "3-1") },
+        { id: "3-1", title: "Spotting Phishing Scams", duration: "12:30", completed: false, videoUrl: "https://www.youtube.com/embed/UGN0_3HGtgg", quizzes: generateQuizzes("Phishing", "3-1") },
         { id: "3-2", title: "Creating Strong Passwords", duration: "8:45", completed: false, videoUrl: "https://www.youtube.com/embed/7U-RbOKanYs", quizzes: generateQuizzes("Passwords", "3-2") },
         { id: "3-3", title: "Safe Online Shopping", duration: "11:15", completed: false, videoUrl: "https://www.youtube.com/embed/6m6uP8n0v5E", quizzes: generateQuizzes("Safe shopping", "3-3") },
       ]
@@ -309,4 +309,3 @@ export default function Courses() {
     </div>
   );
 }
-
