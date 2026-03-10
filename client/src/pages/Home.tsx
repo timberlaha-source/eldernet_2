@@ -1,5 +1,5 @@
-import heroVideoPlaceholder from '@/assets/images/hero-video-placeholder.jpg';
-import { Button } from "@/components/ui/button";
+import heroVideoPlaceholder from '../assets/images/hero-video-placeholder.jpg';
+import { Button } from "../components/ui/button";
 import { Link } from "wouter";
 
 export default function Home() {
