@@ -3,7 +3,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
+} from "../components/ui/accordion"; // Updated from @/ to ../
 
 export default function FAQ() {
   const faqs = [
@@ -47,13 +47,4 @@ export default function FAQ() {
               <AccordionTrigger className="px-[20px] py-[20px] text-[20px] font-bold text-secondary hover:no-underline hover:bg-muted/80 transition-colors [&[data-state=open]]:bg-muted/80">
                 {faq.question}
               </AccordionTrigger>
-              <AccordionContent className="px-[20px] pb-[20px] pt-0 text-[18px] leading-[1.6] text-secondary/80">
-                {faq.answer}
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
-      </div>
-    </div>
-  );
-}
+              <AccordionContent className="px-[20px] pb-
