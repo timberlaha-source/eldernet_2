@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent } from "@/components/ui/card";
+// Corrected from @/ to ../
+import { Button } from "../components/ui/button";
+import { Progress } from "../components/ui/progress";
+import { RadioGroup, RadioGroupItem } from "../components/ui/radio-group";
+import { Label } from "../components/ui/label";
+import { Card, CardContent } from "../components/ui/card";
 import {
   PlayCircle,
   CheckCircle2,
@@ -14,7 +15,7 @@ import {
   Award,
   Coins
 } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "../hooks/use-toast"; // Corrected path
 
 interface Quiz {
   question: string;
