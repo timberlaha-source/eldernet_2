@@ -13,7 +13,7 @@ import Courses from "./pages/Courses";
 import FAQ from "./pages/FAQ";
 import Contact from "./pages/Contact";
 import Profile from "./pages/Profile";
-import NotFound from "@/pages/not-found";
+import NotFound from "./pages/not-found";";
 
 function Router() {
   return (
