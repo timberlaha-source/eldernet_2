@@ -4,13 +4,13 @@ import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
-import { 
-  PlayCircle, 
-  CheckCircle2, 
-  ChevronRight, 
-  ArrowLeft, 
-  BookOpen, 
-  Play, 
+import {
+  PlayCircle,
+  CheckCircle2,
+  ChevronRight,
+  ArrowLeft,
+  BookOpen,
+  Play,
   Award,
   Coins
 } from "lucide-react";
@@ -94,7 +94,6 @@ const generateQuizzes = (topic: string, lessonId: string): Quiz[] => {
     }
   ];
 
-  // Use lessonId to seed selection for consistency per lesson
   const seed = lessonId.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
   const shuffled = [...questionTemplates].sort((a, b) => {
     const hashA = (a.question.length + seed) % 10;
@@ -136,21 +135,30 @@ export default function Courses() {
       description: "Learn the basics of browsing, using search engines, and navigating websites safely.",
       progress: 0,
       lessons: [
-        { 
-          id: "1-1", title: "What is the Internet?", duration: "5:30", completed: false,
+        {
+          id: "1-1",
+          title: "What is the Internet?",
+          duration: "5:30",
+          completed: false,
           videoUrl: "https://www.youtube.com/embed/AYdF7b3nM-Q",
           quizzes: generateQuizzes("the Internet", "1-1")
         },
-        { 
-          id: "1-2", title: "How does the Internet Work?", duration: "8:15", completed: false,
+        {
+          id: "1-2",
+          title: "How does the Internet Work?",
+          duration: "8:15",
+          completed: false,
           videoUrl: "https://www.youtube.com/embed/TNQsmPf24go",
           quizzes: generateQuizzes("Internet connections", "1-2")
         },
-        { 
-          id: "1-3", title: "Using a Web Browser", duration: "10:00", completed: false,
+        {
+          id: "1-3",
+          title: "Using a Web Browser",
+          duration: "10:00",
+          completed: false,
           videoUrl: "https://www.youtube.com/embed/o4MwTvtyrUQ",
           quizzes: generateQuizzes("Web Browsers", "1-3")
-        },
+        }
       ]
     },
     {
@@ -160,9 +168,30 @@ export default function Courses() {
       description: "Set up an email account, send messages, and learn how to attach photos.",
       progress: 45,
       lessons: [
-        { id: "2-1", title: "Setting up Gmail", duration: "11:35", completed: false, videoUrl: "https://www.youtube.com/watch?v=CtRgwJaW2N4", quizzes: generateQuizzes("Gmail", "2-1") },
-        { id: "2-2", title: "Sending your first email", duration: "1:16", completed: false, videoUrl: "https://www.youtube.com/watch?v=BmKLfvNILNc", quizzes: generateQuizzes("Emailing", "2-2") },
-        { id: "2-3", title: "Managing your inbox", duration: "8:22", completed: false, videoUrl: "https://www.youtube.com/watch?v=oLdHnWLbn4A", quizzes: generateQuizzes("Inbox management", "2-3") },
+        {
+          id: "2-1",
+          title: "Setting up Gmail",
+          duration: "11:35",
+          completed: false,
+          videoUrl: "https://www.youtube.com/embed/CtRgwJaW2N4",
+          quizzes: generateQuizzes("Gmail", "2-1")
+        },
+        {
+          id: "2-2",
+          title: "Sending your first email",
+          duration: "1:16",
+          completed: false,
+          videoUrl: "https://www.youtube.com/embed/BmKLfvNILNc",
+          quizzes: generateQuizzes("Emailing", "2-2")
+        },
+        {
+          id: "2-3",
+          title: "Managing your inbox",
+          duration: "8:22",
+          completed: false,
+          videoUrl: "https://www.youtube.com/embed/oLdHnWLbn4A",
+          quizzes: generateQuizzes("Inbox management", "2-3")
+        }
       ]
     },
     {
@@ -172,9 +201,30 @@ export default function Courses() {
       description: "Essential knowledge on identifying phishing, strong passwords, and secure browsing.",
       progress: 0,
       lessons: [
-        { id: "3-1", title: "Spotting Phishing Scams", duration: "2:06", completed: false, videoUrl: "https://www.youtube.com/watch?v=iHetr8xTWIU&t=20s", quizzes: generateQuizzes("Phishing", "3-1") },
-        { id: "3-2", title: "Creating Strong Passwords", duration: "3:30", completed: false, videoUrl: "https://www.youtube.com/watch?v=aEmF3Iylvr4", quizzes: generateQuizzes("Passwords", "3-2") },
-        { id: "3-3", title: "Safe Online Shopping", duration: "1:40", completed: false, videoUrl: "https://www.youtube.com/watch?v=ye5owBey3Y8", quizzes: generateQuizzes("Safe shopping", "3-3") },
+        {
+          id: "3-1",
+          title: "Spotting Phishing Scams",
+          duration: "2:06",
+          completed: false,
+          videoUrl: "https://www.youtube.com/embed/iHetr8xTWIU",
+          quizzes: generateQuizzes("Phishing", "3-1")
+        },
+        {
+          id: "3-2",
+          title: "Creating Strong Passwords",
+          duration: "3:30",
+          completed: false,
+          videoUrl: "https://www.youtube.com/embed/aEmF3Iylvr4",
+          quizzes: generateQuizzes("Passwords", "3-2")
+        },
+        {
+          id: "3-3",
+          title: "Safe Online Shopping",
+          duration: "1:40",
+          completed: false,
+          videoUrl: "https://www.youtube.com/embed/ye5owBey3Y8",
+          quizzes: generateQuizzes("Safe shopping", "3-3")
+        }
       ]
     }
   ];
@@ -185,9 +235,10 @@ export default function Courses() {
 
     if (parseInt(quizAnswer) === currentLesson.quizzes[activeQuizIdx].correctAnswer) {
       updatePoints(5);
+
       toast({
         title: "Correct! +5 Points",
-        description: "Excellent answer!",
+        description: "Excellent answer!"
       });
 
       if (activeQuizIdx < currentLesson.quizzes.length - 1) {
@@ -205,7 +256,8 @@ export default function Courses() {
     }
   };
 
-  const filteredCourses = filter === "All" ? courses : courses.filter(c => c.category === filter);
+  const filteredCourses =
+    filter === "All" ? courses : courses.filter(c => c.category === filter);
 
   if (selectedCourse) {
     const currentLesson = selectedCourse.lessons[activeLessonIdx];
@@ -214,9 +266,18 @@ export default function Courses() {
     return (
       <div className="max-w-[1200px] mx-auto px-6 py-8">
         <div className="flex justify-between items-center mb-8">
-          <button onClick={() => { setSelectedCourse(null); setShowQuizResult(false); setQuizAnswer(null); setActiveQuizIdx(0); }} className="flex items-center gap-2 text-secondary hover:text-primary font-medium">
+          <button
+            onClick={() => {
+              setSelectedCourse(null);
+              setShowQuizResult(false);
+              setQuizAnswer(null);
+              setActiveQuizIdx(0);
+            }}
+            className="flex items-center gap-2 text-secondary hover:text-primary font-medium"
+          >
             <ArrowLeft className="w-5 h-5" /> Back to Courses
           </button>
+
           <div className="flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full border border-primary/20">
             <Coins className="w-5 h-5 text-primary" />
             <span className="font-bold text-secondary">{points} Credits</span>
@@ -226,29 +287,64 @@ export default function Courses() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
             <div className="bg-black aspect-video rounded-xl overflow-hidden shadow-2xl">
-              <iframe className="w-full h-full" src={currentLesson.videoUrl} title={currentLesson.title} frameBorder="0" allowFullScreen></iframe>
+              <iframe
+                className="w-full h-full"
+                src={currentLesson.videoUrl}
+                title={currentLesson.title}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
             </div>
-            
+
             <div className="space-y-6">
-              <h1 className="text-3xl font-bold text-secondary">{currentLesson.title}</h1>
-              
+              <h1 className="text-3xl font-bold text-secondary">
+                {currentLesson.title}
+              </h1>
+
               {currentQuiz && !showQuizResult && (
                 <Card className="border-2 border-primary/20">
                   <div className="bg-primary/5 p-4 border-b flex justify-between items-center">
-                    <h3 className="font-bold text-secondary">Question {activeQuizIdx + 1} of 5</h3>
-                    <span className="text-sm font-bold text-primary">5 Points</span>
+                    <h3 className="font-bold text-secondary">
+                      Question {activeQuizIdx + 1} of 5
+                    </h3>
+                    <span className="text-sm font-bold text-primary">
+                      5 Points
+                    </span>
                   </div>
+
                   <CardContent className="p-6 space-y-6">
-                    <p className="text-xl font-medium text-secondary">{currentQuiz.question}</p>
-                    <RadioGroup onValueChange={setQuizAnswer} value={quizAnswer || ""}>
+                    <p className="text-xl font-medium text-secondary">
+                      {currentQuiz.question}
+                    </p>
+
+                    <RadioGroup
+                      onValueChange={setQuizAnswer}
+                      value={quizAnswer || ""}
+                    >
                       {currentQuiz.options.map((option, idx) => (
-                        <div key={idx} className="flex items-center space-x-3 p-3 rounded-lg border border-border hover:bg-muted/30">
+                        <div
+                          key={idx}
+                          className="flex items-center space-x-3 p-3 rounded-lg border border-border hover:bg-muted/30"
+                        >
                           <RadioGroupItem value={idx.toString()} id={`opt-${idx}`} />
-                          <Label htmlFor={`opt-${idx}`} className="text-lg cursor-pointer w-full">{option}</Label>
+                          <Label
+                            htmlFor={`opt-${idx}`}
+                            className="text-lg cursor-pointer w-full"
+                          >
+                            {option}
+                          </Label>
                         </div>
                       ))}
                     </RadioGroup>
-                    <Button onClick={handleQuizSubmit} disabled={!quizAnswer} className="w-full h-14 text-lg font-bold bg-primary">SUBMIT ANSWER</Button>
+
+                    <Button
+                      onClick={handleQuizSubmit}
+                      disabled={!quizAnswer}
+                      className="w-full h-14 text-lg font-bold bg-primary"
+                    >
+                      SUBMIT ANSWER
+                    </Button>
                   </CardContent>
                 </Card>
               )}
@@ -257,7 +353,22 @@ export default function Courses() {
                 <Card className="text-center py-10 space-y-4">
                   <CheckCircle2 className="w-16 h-16 text-primary mx-auto" />
                   <h2 className="text-2xl font-bold">Lesson Complete!</h2>
-                  <Button onClick={() => { if (activeLessonIdx < selectedCourse.lessons.length - 1) { setActiveLessonIdx(activeLessonIdx + 1); setActiveQuizIdx(0); setShowQuizResult(false); setQuizAnswer(null); } else { setSelectedCourse(null); } }} className="bg-primary h-12 px-8">NEXT LESSON</Button>
+
+                  <Button
+                    onClick={() => {
+                      if (activeLessonIdx < selectedCourse.lessons.length - 1) {
+                        setActiveLessonIdx(activeLessonIdx + 1);
+                        setActiveQuizIdx(0);
+                        setShowQuizResult(false);
+                        setQuizAnswer(null);
+                      } else {
+                        setSelectedCourse(null);
+                      }
+                    }}
+                    className="bg-primary h-12 px-8"
+                  >
+                    NEXT LESSON
+                  </Button>
                 </Card>
               )}
             </div>
@@ -265,10 +376,29 @@ export default function Courses() {
 
           <div className="bg-white rounded-xl border p-6 h-fit space-y-6">
             <h3 className="text-xl font-bold">Course Lessons</h3>
+
             <div className="space-y-3">
               {selectedCourse.lessons.map((lesson, idx) => (
-                <div key={lesson.id} onClick={() => { setActiveLessonIdx(idx); setActiveQuizIdx(0); setShowQuizResult(false); }} className={`p-4 rounded-lg border cursor-pointer ${idx === activeLessonIdx ? "border-primary bg-primary/5" : "border-transparent hover:bg-muted"}`}>
-                  <p className={`font-semibold ${idx === activeLessonIdx ? "text-primary" : ""}`}>{idx + 1}. {lesson.title}</p>
+                <div
+                  key={lesson.id}
+                  onClick={() => {
+                    setActiveLessonIdx(idx);
+                    setActiveQuizIdx(0);
+                    setShowQuizResult(false);
+                  }}
+                  className={`p-4 rounded-lg border cursor-pointer ${
+                    idx === activeLessonIdx
+                      ? "border-primary bg-primary/5"
+                      : "border-transparent hover:bg-muted"
+                  }`}
+                >
+                  <p
+                    className={`font-semibold ${
+                      idx === activeLessonIdx ? "text-primary" : ""
+                    }`}
+                  >
+                    {idx + 1}. {lesson.title}
+                  </p>
                   <p className="text-xs text-secondary/50">{lesson.duration}</p>
                 </div>
               ))}
@@ -283,26 +413,55 @@ export default function Courses() {
     <div className="max-w-[1200px] mx-auto px-6 py-16">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-[42px] font-bold text-secondary">OUR COURSES</h1>
+
         <div className="flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full border border-primary/20">
           <Coins className="w-5 h-5 text-primary" />
-          <span className="font-bold text-secondary">{points} Credits Earned</span>
+          <span className="font-bold text-secondary">
+            {points} Credits Earned
+          </span>
         </div>
       </div>
 
       <div className="flex flex-wrap gap-4 mb-10">
-        {categories.map((cat) => (
-          <button key={cat} onClick={() => setFilter(cat)} className={`px-6 py-2 rounded-full text-[16px] font-bold transition-all border-2 ${filter === cat ? "bg-primary border-primary text-white" : "bg-white border-border text-secondary"}`}>
+        {["All", "Basics", "Communication", "Safety"].map(cat => (
+          <button
+            key={cat}
+            onClick={() => setFilter(cat)}
+            className={`px-6 py-2 rounded-full text-[16px] font-bold transition-all border-2 ${
+              filter === cat
+                ? "bg-primary border-primary text-white"
+                : "bg-white border-border text-secondary"
+            }`}
+          >
             {cat}
           </button>
         ))}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-[32px]">
-        {filteredCourses.map((course) => (
-          <div key={course.id} className="bg-white p-[24px] rounded-[12px] shadow-sm border flex flex-col hover:shadow-md group">
-            <h2 className="text-[24px] font-bold text-secondary mb-3">{course.title}</h2>
-            <p className="text-[18px] text-secondary/80 mb-6 flex-grow">{course.description}</p>
-            <Button onClick={() => { setSelectedCourse(course); setActiveLessonIdx(0); setActiveQuizIdx(0); }} className="w-full h-[60px] bg-primary text-white text-[20px] font-bold rounded-[8px]">START LESSON</Button>
+        {filteredCourses.map(course => (
+          <div
+            key={course.id}
+            className="bg-white p-[24px] rounded-[12px] shadow-sm border flex flex-col hover:shadow-md group"
+          >
+            <h2 className="text-[24px] font-bold text-secondary mb-3">
+              {course.title}
+            </h2>
+
+            <p className="text-[18px] text-secondary/80 mb-6 flex-grow">
+              {course.description}
+            </p>
+
+            <Button
+              onClick={() => {
+                setSelectedCourse(course);
+                setActiveLessonIdx(0);
+                setActiveQuizIdx(0);
+              }}
+              className="w-full h-[60px] bg-primary text-white text-[20px] font-bold rounded-[8px]"
+            >
+              START LESSON
+            </Button>
           </div>
         ))}
       </div>
