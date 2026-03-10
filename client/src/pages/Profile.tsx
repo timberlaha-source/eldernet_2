@@ -6,55 +6,138 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { LogIn, UserPlus, Chrome, User, LogOut, Coins } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
+// Firebase auth helpers
+import {
+  auth,
+  db,
+  // the value of `auth` and `db` are exported from src/lib/firebase.ts
+} from "@/lib/firebase";
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  updateProfile,
+  User as FirebaseUser,
+} from "firebase/auth";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
+
 export default function Profile() {
   const [isLogin, setIsLogin] = useState(true);
-  const [user, setUser] = useState<{ name: string; email: string } | null>(null);
+  // hold firebase user object
+  const [user, setUser] = useState<FirebaseUser | null>(null);
   const [points, setPoints] = useState(0);
+  const [coursesStarted, setCoursesStarted] = useState(0);
+  const [lessonsFinished, setLessonsFinished] = useState(0);
   const { toast } = useToast();
 
+  // on mount we start observing auth state. firebase will keep the session in
+  // local storage/cookies automatically so the user remains logged in.
   useEffect(() => {
-    const savedUser = localStorage.getItem("eldernet_user");
-    const savedPoints = localStorage.getItem("eldernet_points");
-    if (savedUser) setUser(JSON.parse(savedUser));
-    if (savedPoints) setPoints(parseInt(savedPoints));
+    const unsubscribe = onAuthStateChanged(auth, async (u) => {
+      setUser(u);
+      if (u) {
+        // load user data from Firestore
+        const userDocRef = doc(db, "users", u.uid);
+        const userDoc = await getDoc(userDocRef);
+        if (userDoc.exists()) {
+          const data = userDoc.data();
+          setPoints(data.points || 0);
+          setCoursesStarted(data.coursesStarted || 0);
+          setLessonsFinished(data.lessonsFinished || 0);
+        } else {
+          // initialize new user data
+          await setDoc(userDocRef, {
+            points: 0,
+            coursesStarted: 0,
+            lessonsFinished: 0,
+            email: u.email,
+            displayName: u.displayName,
+          });
+        }
+      } else {
+        // reset local state
+        setPoints(0);
+        setCoursesStarted(0);
+        setLessonsFinished(0);
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
 
-  const handleAuth = (e: React.FormEvent) => {
+  // helper to show toast on error
+  function showError(err: unknown) {
+    console.error(err);
+    toast({
+      title: "Authentication error",
+      description: (err as Error).message,
+      variant: "destructive",
+    });
+  }
+
+  const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget as HTMLFormElement);
     const email = formData.get("email") as string;
-    const name = (formData.get("name") as string) || email.split("@")[0];
-    
-    const userData = { name, email };
-    setUser(userData);
-    localStorage.setItem("eldernet_user", JSON.stringify(userData));
-    
-    toast({
-      title: isLogin ? "Welcome Back!" : "Account Created!",
-      description: `Signed in as ${email}. Your progress will be saved to this device.`,
-    });
+    const password = formData.get("password") as string;
+
+    try {
+      if (isLogin) {
+        await signInWithEmailAndPassword(auth, email, password);
+        toast({ title: "Signed in", description: `Welcome back, ${email}!` });
+      } else {
+        const result = await createUserWithEmailAndPassword(auth, email, password);
+        // if the user supplied a name field, update the profile
+        const nameField = formData.get("name") as string;
+        if (nameField && result.user) {
+          await updateProfile(result.user, { displayName: nameField });
+        }
+        // initialize user data in Firestore
+        const userDocRef = doc(db, "users", result.user.uid);
+        await setDoc(userDocRef, {
+          points: 0,
+          coursesStarted: 0,
+          lessonsFinished: 0,
+          email: result.user.email,
+          displayName: nameField || result.user.email?.split("@")[0],
+        });
+        toast({ title: "Account created", description: `Welcome, ${email}!` });
+      }
+    } catch (err) {
+      showError(err);
+    }
   };
 
-  const handleGoogleLogin = () => {
-    const userData = { name: "Google User", email: "user@gmail.com" };
-    setUser(userData);
-    localStorage.setItem("eldernet_user", JSON.stringify(userData));
-    toast({
-      title: "Google Sign In Successful",
-      description: "Recognized via Google. Welcome back!",
-    });
+  const handleGoogleLogin = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      await signInWithPopup(auth, provider);
+      toast({ title: "Google sign in successful" });
+    } catch (err) {
+      showError(err);
+    }
   };
 
-  const handleLogout = () => {
-    setUser(null);
-    localStorage.removeItem("eldernet_user");
-    toast({
-      title: "Signed Out",
-      description: "You have been successfully signed out.",
-    });
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      toast({ title: "Signed out", description: "You have been successfully signed out." });
+    } catch (err) {
+      showError(err);
+    }
   };
 
   if (user) {
+    const displayName =
+      user.displayName || user.email?.split("@")[0] || "Unknown User";
     return (
       <div className="max-w-[1200px] mx-auto px-6 py-16 flex justify-center items-center min-h-[70vh]">
         <Card className="w-full max-w-[600px] border-border/40 shadow-xl rounded-[20px] overflow-hidden">
@@ -66,7 +149,7 @@ export default function Profile() {
           <CardContent className="pt-16 pb-8 px-8 space-y-6">
             <div className="flex justify-between items-start">
               <div>
-                <h2 className="text-3xl font-bold text-secondary">{user.name}</h2>
+                <h2 className="text-3xl font-bold text-secondary">{displayName}</h2>
                 <p className="text-secondary/60 text-lg">{user.email}</p>
               </div>
               <div className="bg-primary/10 px-4 py-2 rounded-full border border-primary/20 flex items-center gap-2">
@@ -78,13 +161,24 @@ export default function Profile() {
             <div className="grid grid-cols-2 gap-4">
               <div className="p-4 bg-muted/30 rounded-xl border border-border">
                 <p className="text-sm font-bold text-secondary/40 uppercase">Courses Started</p>
-                <p className="text-2xl font-bold text-secondary">3</p>
+                <p className="text-2xl font-bold text-secondary">{coursesStarted}</p>
               </div>
               <div className="p-4 bg-muted/30 rounded-xl border border-border">
                 <p className="text-sm font-bold text-secondary/40 uppercase">Lessons Finished</p>
-                <p className="text-2xl font-bold text-secondary">12</p>
+                <p className="text-2xl font-bold text-secondary">{lessonsFinished}</p>
               </div>
             </div>
+
+            <Button onClick={async () => {
+              if (!user) return;
+              const newPoints = points + 10;
+              setPoints(newPoints);
+              const userDocRef = doc(db, "users", user.uid);
+              await updateDoc(userDocRef, { points: newPoints });
+              toast({ title: "Points updated", description: "Earned 10 points!" });
+            }} variant="outline" className="w-full h-[60px] border-primary text-primary hover:bg-primary/5 text-lg font-bold rounded-[12px] flex items-center justify-center gap-2">
+              <Coins className="w-5 h-5" /> EARN 10 POINTS (DEMO)
+            </Button>
 
             <Button onClick={handleLogout} variant="outline" className="w-full h-[60px] border-destructive text-destructive hover:bg-destructive/5 text-lg font-bold rounded-[12px] flex items-center justify-center gap-2">
               <LogOut className="w-5 h-5" /> SIGN OUT
