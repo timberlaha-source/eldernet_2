@@ -1,4 +1,4 @@
-import { useToast } from "@/hooks/use-toast"
+import { useToast } from "../../hooks/use-toast"; // Fixed: Up to src, then hooks
 import {
   Toast,
   ToastClose,
@@ -6,7 +6,7 @@ import {
   ToastProvider,
   ToastTitle,
   ToastViewport,
-} from "@/components/ui/toast"
+} from "./toast"; // Fixed: Same folder, use ./
 
 export function Toaster() {
   const { toasts } = useToast()
