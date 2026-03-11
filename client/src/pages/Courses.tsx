@@ -229,5 +229,57 @@ export default function Courses() {
     }
   ];
 
-  // (rest of the original component continues exactly as you provided)
-}
+  const handleQuizSubmit = () => {
+    const currentLesson = selectedCourse?.lessons[activeLessonIdx];
+    if (!currentLesson?.quizzes[activeQuizIdx] || quizAnswer === null) return;
+
+    if (parseInt(quizAnswer) === currentLesson.quizzes[activeQuizIdx].correctAnswer) {
+      updatePoints(5);
+
+      toast({
+        title: "Correct! +5 Points",
+        description: "Excellent answer!"
+      });
+
+      if (activeQuizIdx < currentLesson.quizzes.length - 1) {
+        setActiveQuizIdx(activeQuizIdx + 1);
+        setQuizAnswer(null);
+      } else {
+        setShowQuizResult(true);
+      }
+    } else {
+      toast({
+        title: "Not quite",
+        description: "Review the video and try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const filteredCourses =
+    filter === "All" ? courses : courses.filter(c => c.category === filter);
+
+  if (selectedCourse) {
+    const currentLesson = selectedCourse.lessons[activeLessonIdx];
+    const currentQuiz = currentLesson.quizzes[activeQuizIdx];
+
+    return (
+      <div className="max-w-[1200px] mx-auto px-6 py-8">
+        <div className="flex justify-between items-center mb-8">
+          <button
+            onClick={() => {
+              setSelectedCourse(null);
+              setShowQuizResult(false);
+              setQuizAnswer(null);
+              setActiveQuizIdx(0);
+            }}
+            className="flex items-center gap-2 text-secondary hover:text-primary font-medium"
+          >
+            <ArrowLeft className="w-5 h-5" /> Back to Courses
+          </button>
+
+          <div className="flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full border border-primary/20">
+            <Coins className="w-5 h-5 text-primary" />
+            <span className="font-bold text-secondary">{points} Credits</span>
+          </div>
+        </div>
