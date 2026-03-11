@@ -283,3 +283,188 @@ export default function Courses() {
             <span className="font-bold text-secondary">{points} Credits</span>
           </div>
         </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2 space-y-8">
+            <div className="bg-black aspect-video rounded-xl overflow-hidden shadow-2xl">
+              <iframe
+                className="w-full h-full"
+                src={currentLesson.videoUrl}
+                title={currentLesson.title}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
+
+            <div className="space-y-6">
+              <h1 className="text-3xl font-bold text-secondary">
+                {currentLesson.title}
+              </h1>
+
+              {currentQuiz && !showQuizResult && (
+                <Card className="border-2 border-primary/20">
+                  <div className="bg-primary/5 p-4 border-b flex justify-between items-center">
+                    <h3 className="font-bold text-secondary">
+                      Question {activeQuizIdx + 1} of 5
+                    </h3>
+                    <span className="text-sm font-bold text-primary">
+                      5 Points
+                    </span>
+                  </div>
+
+                  <CardContent className="p-6 space-y-6">
+                    <p className="text-xl font-medium text-secondary">
+                      {currentQuiz.question}
+                    </p>
+
+                    <RadioGroup
+                      onValueChange={setQuizAnswer}
+                      value={quizAnswer || ""}
+                    >
+                      {currentQuiz.options.map((option, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-center space-x-3 p-3 rounded-lg border border-border hover:bg-muted/30"
+                        >
+                          <RadioGroupItem value={idx.toString()} id={`opt-${idx}`} />
+                          <Label
+                            htmlFor={`opt-${idx}`}
+                            className="text-lg cursor-pointer w-full"
+                          >
+                            {option}
+                          </Label>
+                        </div>
+                      ))}
+                    </RadioGroup>
+
+                    <Button
+                      onClick={handleQuizSubmit}
+                      disabled={!quizAnswer}
+                      className="w-full h-14 text-lg font-bold bg-primary"
+                    >
+                      SUBMIT ANSWER
+                    </Button>
+                  </CardContent>
+                </Card>
+              )}
+
+              {showQuizResult && (
+                <Card className="text-center py-10 space-y-4">
+                  <CheckCircle2 className="w-16 h-16 text-primary mx-auto" />
+                  <h2 className="text-2xl font-bold">Lesson Complete!</h2>
+
+                  <Button
+                    onClick={() => {
+                      if (activeLessonIdx < selectedCourse.lessons.length - 1) {
+                        setActiveLessonIdx(activeLessonIdx + 1);
+                        setActiveQuizIdx(0);
+                        setShowQuizResult(false);
+                        setQuizAnswer(null);
+                      } else {
+                        setSelectedCourse(null);
+                      }
+                    }}
+                    className="bg-primary h-12 px-8"
+                  >
+                    NEXT LESSON
+                  </Button>
+                </Card>
+              )}
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl border p-6 h-fit space-y-6">
+            <h3 className="text-xl font-bold">Course Lessons</h3>
+
+            <div className="space-y-3">
+              {selectedCourse.lessons.map((lesson, idx) => (
+                <div
+                  key={lesson.id}
+                  onClick={() => {
+                    setActiveLessonIdx(idx);
+                    setActiveQuizIdx(0);
+                    setShowQuizResult(false);
+                  }}
+                  className={`p-4 rounded-lg border cursor-pointer ${
+                    idx === activeLessonIdx
+                      ? "border-primary bg-primary/5"
+                      : "border-transparent hover:bg-muted"
+                  }`}
+                >
+                  <p
+                    className={`font-semibold ${
+                      idx === activeLessonIdx ? "text-primary" : ""
+                    }`}
+                  >
+                    {idx + 1}. {lesson.title}
+                  </p>
+                  <p className="text-xs text-secondary/50">{lesson.duration}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-[1200px] mx-auto px-6 py-16">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-[42px] font-bold text-secondary">OUR COURSES</h1>
+
+        <div className="flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full border border-primary/20">
+          <Coins className="w-5 h-5 text-primary" />
+          <span className="font-bold text-secondary">
+            {points} Credits Earned
+          </span>
+        </div>
+      </div>
+
+      <div className="flex flex-wrap gap-4 mb-10">
+        {["All", "Basics", "Communication", "Safety"].map(cat => (
+          <button
+            key={cat}
+            onClick={() => setFilter(cat)}
+            className={`px-6 py-2 rounded-full text-[16px] font-bold transition-all border-2 ${
+              filter === cat
+                ? "bg-primary border-primary text-white"
+                : "bg-white border-border text-secondary"
+            }`}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-[32px]">
+        {filteredCourses.map(course => (
+          <div
+            key={course.id}
+            className="bg-white p-[24px] rounded-[12px] shadow-sm border flex flex-col hover:shadow-md group"
+          >
+            <h2 className="text-[24px] font-bold text-secondary mb-3">
+              {course.title}
+            </h2>
+
+            <p className="text-[18px] text-secondary/80 mb-6 flex-grow">
+              {course.description}
+            </p>
+
+            <Button
+              onClick={() => {
+                setSelectedCourse(course);
+                setActiveLessonIdx(0);
+                setActiveQuizIdx(0);
+              }}
+              className="w-full h-[60px] bg-primary text-white text-[20px] font-bold rounded-[8px]"
+            >
+              START LESSON
+            </Button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
